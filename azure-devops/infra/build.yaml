@@ -1,0 +1,16 @@
+ # resources:
+#   repositories:
+#   - repository: self
+#     type: git
+#     ref: main
+
+ # this lot is for the infrastructure deployment really
+  # - checkout: self
+  # - task: CopyFiles@2
+  #   displayName: Copy Files
+  #   inputs:
+  #     Contents: '**/*.json'
+  #     TargetFolder: $(build.ArtifactStagingDirectory)
+  # - task: PublishBuildArtifacts@1
+  #   displayName: 'Publish Artifact: drop'
+...

@@ -21,7 +21,7 @@ jobs:
   - task: CopyFiles@2
     displayName: Copy Files
     inputs:
-      Contents: '**/*.json'
+      Contents: 'infrastructure/*.json'
       TargetFolder: $(build.ArtifactStagingDirectory)
   
   - task: PublishBuildArtifacts@1

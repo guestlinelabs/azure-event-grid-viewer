@@ -4,13 +4,26 @@
 #     type: git
 #     ref: main
 
+trigger:
+  branches:
+    include:
+    - main
+
+jobs:
+- job: 'Default'
+  displayName: Agent job 1
+  pool:
+    vmImage: ubuntu-20.04
+
  # this lot is for the infrastructure deployment really
   # - checkout: self
-  # - task: CopyFiles@2
-  #   displayName: Copy Files
-  #   inputs:
-  #     Contents: '**/*.json'
-  #     TargetFolder: $(build.ArtifactStagingDirectory)
-  # - task: PublishBuildArtifacts@1
-  #   displayName: 'Publish Artifact: drop'
+  steps:
+  - task: CopyFiles@2
+    displayName: Copy Files
+    inputs:
+      Contents: '**/*.json'
+      TargetFolder: $(build.ArtifactStagingDirectory)
+  
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
 ...

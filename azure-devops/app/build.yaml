@@ -5,7 +5,7 @@ trigger:
 
 variables:
   BuildConfiguration: 'Release'
-  SolutionPath: '../../AzureEventGridViewer.sln'
+  ProjectPath: '../../viewer/viewer.csproj'
 
 jobs:
 - job: 'Default'
@@ -14,25 +14,19 @@ jobs:
     vmImage: ubuntu-20.04
 
   steps:
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
-      inputs:
-        packageType: sdk
-        version: 3.1.x
-        installationPath: $(Agent.ToolsDirectory)/dotnet
-
     - task: DotNetCoreCLI@2
       displayName: 'Build web project'
       inputs:
         command: 'build'
-        projects: $(SolutionPath)
+        arguments: '--configuration $(buildConfiguration)'
+        projects: $(ProjectPath)
         
     - task: DotNetCoreCLI@2
       displayName: 'Publish'
       inputs:
         command: publish
-        publishWebProjects: False
-        projects: $(SolutionPath)
+        publishWebProjects: True
+        projects: $(ProjectPath)
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: False
+        zipAfterPublish: True
 ...

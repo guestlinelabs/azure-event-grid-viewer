@@ -5,7 +5,7 @@ trigger:
 
 variables:
   BuildConfiguration: 'Release'
-  ProjectPath: '../../viewer/viewer.csproj'
+  ProjectPath: '**/*.csproj'
 
 jobs:
 - job: 'Default'

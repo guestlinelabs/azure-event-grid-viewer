@@ -36,13 +36,6 @@
           "None",
           "SystemAssigned"
         ]
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Location for all resources."
-        }
       }
     },
     "resources": [
@@ -50,7 +43,7 @@
         "apiVersion": "2015-08-01",
         "name": "[parameters('hostingPlanName')]",
         "type": "Microsoft.Web/serverfarms",
-        "location": "[parameters('location')]",
+        "location": "[resourcegroup().location]",
         "sku": {
           "name": "[parameters('sku')]",
           "capacity": 0
@@ -66,7 +59,7 @@
         "identity": {
           "type": "[parameters('identity')]"
         },
-        "location": "[parameters('location')]",
+        "location": "[resourcegroup().location]",
         "dependsOn": [
           "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
         ],

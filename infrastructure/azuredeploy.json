@@ -76,7 +76,7 @@
             "webSocketsEnabled": true         
           },
           "httpsOnly":true
-        },
+        }
         // This resources section is basically what deploys direct from the repo. I think we don't need it as we'll do this with pipelines - comment out for now, remove later
         // "resources": [
         //   {

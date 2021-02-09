@@ -37,20 +37,6 @@
           "SystemAssigned"
         ]
       },
-      "repoURL": {
-        "type": "string",
-        "defaultValue": "https://github.com/Azure-Samples/azure-event-grid-viewer.git",
-        "metadata": {
-          "description": "The URL for the GitHub repository that contains the project to deploy."
-        }
-      },
-      "branch": {
-        "type": "string",
-        "defaultValue": "main",
-        "metadata": {
-          "description": "The branch of the GitHub repository to use."
-        }
-      },
       "location": {
         "type": "string",
         "defaultValue": "[resourceGroup().location]",
@@ -67,7 +53,7 @@
         "location": "[parameters('location')]",
         "sku": {
           "name": "[parameters('sku')]",
-          "capacity": "0"
+          "capacity": 0
         },
         "properties": {
           "name": "[parameters('hostingPlanName')]"
@@ -91,22 +77,22 @@
           },
           "httpsOnly":true
         },
-        // This resources section is basically what deploys direct from the repo. We don't need it as we'll do this with pipelines.
-        "resources": [
-          {
-            "apiVersion": "2015-08-01",
-            "name": "web",
-            "type": "sourcecontrols",
-            "dependsOn": [
-              "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
-            ],
-            "properties": {
-              "RepoUrl": "[parameters('repoURL')]",
-              "branch": "[parameters('branch')]",
-              "IsManualIntegration": true
-            }
-          }
-        ]
+        // This resources section is basically what deploys direct from the repo. I think we don't need it as we'll do this with pipelines - comment out for now, remove later
+        // "resources": [
+        //   {
+        //     "apiVersion": "2018-11-01",
+        //     "name": "web",
+        //     "type": "sourcecontrols",
+        //     "dependsOn": [
+        //       "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
+        //     ],
+        //     "properties": {
+        //       "RepoUrl": "[parameters('repoURL')]",
+        //       "branch": "[parameters('branch')]",
+        //       "IsManualIntegration": true
+        //     }
+        //   }
+        // ]
       }
     ],
     "outputs": {

@@ -2,17 +2,17 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "siteName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the web app that you wish to create."
-        }
+      "EventGridDomain": {
+        "defaultValue": "pms",
+        "type": "string"
       },
-      "hostingPlanName": {
-        "type": "string",
-        "metadata": {
-          "description": "The name of the App Service plan to use for hosting the web app."
-        }
+      "ServiceName": {
+        "defaultValue": "eventgrid-viewer",
+        "type": "string"
+      },
+      "Environment": {
+        "defaultValue": "ci",
+        "type": "string"
       },
       "sku": {
         "type": "string",
@@ -38,10 +38,14 @@
         ]
       }
     },
+    "variables": {
+        "AppServiceFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-as')]",
+        "HostingPlanFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-sp')]"
+    },
     "resources": [
       {
         "apiVersion": "2015-08-01",
-        "name": "[parameters('hostingPlanName')]",
+        "name": "[variables('HostingPlanFullName')]",
         "type": "Microsoft.Web/serverfarms",
         "location": "[resourcegroup().location]",
         "sku": {
@@ -49,49 +53,33 @@
           "capacity": 0
         },
         "properties": {
-          "name": "[parameters('hostingPlanName')]"
+          "name": "[variables('HostingPlanFullName')]"
         }
       },
       {
         "apiVersion": "2015-08-01",
-        "name": "[parameters('siteName')]",
+        "name": "[variables('AppServiceFullName')]",
         "type": "Microsoft.Web/sites",
         "identity": {
           "type": "[parameters('identity')]"
         },
         "location": "[resourcegroup().location]",
         "dependsOn": [
-          "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+          "[resourceId('Microsoft.Web/serverfarms', variables('HostingPlanFullName'))]"
         ],
         "properties": {
-          "serverFarmId": "[parameters('hostingPlanName')]",
+          "serverFarmId": "[variables('HostingPlanFullName')]",
           "siteConfig": {
             "webSocketsEnabled": true         
           },
           "httpsOnly":true
         }
-        // This resources section is basically what deploys direct from the repo. I think we don't need it as we'll do this with pipelines - comment out for now, remove later
-        // "resources": [
-        //   {
-        //     "apiVersion": "2018-11-01",
-        //     "name": "web",
-        //     "type": "sourcecontrols",
-        //     "dependsOn": [
-        //       "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
-        //     ],
-        //     "properties": {
-        //       "RepoUrl": "[parameters('repoURL')]",
-        //       "branch": "[parameters('branch')]",
-        //       "IsManualIntegration": true
-        //     }
-        //   }
-        // ]
       }
     ],
     "outputs": {
         "appServiceEndpoint": {
             "type": "string",
-            "value": "[concat('https://',reference(resourceId('Microsoft.Web/sites', parameters('siteName'))).hostNames[0])]"
+            "value": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0])]"
         }
     }
   }

@@ -4,11 +4,11 @@ trigger:
     - main
   paths:
     exclude:
-    - ../infra
-    - ../../infrastructure
+    - ../infra/*
+    - ../../infrastructure/*
     include:
-    - ../app
-    - ../../viewer
+    - ../app/*
+    - ../../viewer/*
 
 variables:
   BuildConfiguration: 'Release'

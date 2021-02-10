@@ -2,12 +2,19 @@ trigger:
   branches:
     include:
     - main
+  paths:
+    exclude:
+    - ../app/*
+    - ../../viewer/*
+    include:
+    - ../infra/*
+    - ../../infrastructure/*
 
 jobs:
 - job: 'Default'
-  displayName: Agent job 1
+  displayName: 'Build Infrastructure'
   pool:
-    vmImage: ubuntu-20.04
+    vmImage: 'ubuntu-latest'
 
   steps:
   - task: CopyFiles@2

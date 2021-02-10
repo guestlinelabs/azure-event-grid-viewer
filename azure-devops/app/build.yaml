@@ -21,12 +21,19 @@ jobs:
         arguments: '--configuration $(buildConfiguration)'
         projects: $(ProjectPath)
         
-    - task: DotNetCoreCLI@2
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'Publish'
+    #   inputs:
+    #     command: publish
+    #     publishWebProjects: False
+    #     projects: $(ProjectPath)
+    #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    #     zipAfterPublish: True
+
+    - task: PublishBuildArtifacts@1
       displayName: 'Publish'
       inputs:
-        command: publish
-        publishWebProjects: False
-        projects: $(ProjectPath)
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-        zipAfterPublish: True
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/viewer.zip'
+        artifactName: 'viewer'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 ...

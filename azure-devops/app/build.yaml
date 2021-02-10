@@ -35,5 +35,5 @@ jobs:
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/viewer.zip'
         artifactName: 'viewer'
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 ...

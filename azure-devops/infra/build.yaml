@@ -6,9 +6,6 @@ trigger:
     exclude:
     - ../app/*
     - ../../viewer/*
-    # include:
-    # - /
-    # - ../../infrastructure/*
 
 jobs:
 - job: 'Default'

@@ -6,9 +6,6 @@ trigger:
     exclude:
     - ../infra/*
     - ../../infrastructure/*
-    include:
-    - ../app/*
-    - ../../viewer/*
 
 variables:
   BuildConfiguration: 'Release'

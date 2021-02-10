@@ -48,12 +48,14 @@
         "name": "[variables('HostingPlanFullName')]",
         "type": "Microsoft.Web/serverfarms",
         "location": "[resourcegroup().location]",
+        "kind": "app,linux",
+        "properties": {
+            "reserved": true,
+            "name": "[variables('HostingPlanFullName')]"
+        },
         "sku": {
           "name": "[parameters('sku')]",
           "capacity": 0
-        },
-        "properties": {
-          "name": "[variables('HostingPlanFullName')]"
         }
       },
       {

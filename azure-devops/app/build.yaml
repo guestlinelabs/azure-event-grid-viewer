@@ -2,6 +2,10 @@ trigger:
   branches:
     include:
     - main
+  paths:
+    include:
+    - viewer/*
+    - azure-devops/app/*
 
 variables:
   BuildConfiguration: 'Release'
@@ -9,9 +13,9 @@ variables:
 
 jobs:
 - job: 'Default'
-  displayName: 'Agent job 1'
+  displayName: 'Build Web App'
   pool:
-    vmImage: 'ubuntu-18.04'
+    vmImage: 'ubuntu-latest'
 
   steps:
     - task: DotNetCoreCLI@2
@@ -29,11 +33,6 @@ jobs:
         projects: $(ProjectPath)
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True
-
-    # - task: CopyFiles@2
-    #   inputs:
-    #     sourceFolder: $(Build.SourcesDirectory)
-    #     targetFolder: $(Build.ArtifactStagingDirectory)
         
     - task: PublishBuildArtifacts@1
       displayName: 'Publish'

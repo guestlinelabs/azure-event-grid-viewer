@@ -4,8 +4,8 @@ trigger:
     - main
   paths:
     exclude:
-    - azure-devops/infra/*
-    - infrastructure/*
+    - azure-devops/infra
+    - infrastructure
     include:
     - azure-devops/app/*
     - viewer/*

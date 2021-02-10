@@ -21,15 +21,20 @@ jobs:
         arguments: '--configuration $(buildConfiguration)'
         projects: $(ProjectPath)
         
-    # - task: DotNetCoreCLI@2
-    #   displayName: 'Publish'
-    #   inputs:
-    #     command: publish
-    #     publishWebProjects: False
-    #     projects: $(ProjectPath)
-    #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    #     zipAfterPublish: True
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish'
+      inputs:
+        command: publish
+        publishWebProjects: False
+        projects: $(ProjectPath)
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True
 
+    # - task: CopyFiles@2
+    #   inputs:
+    #     sourceFolder: $(Build.SourcesDirectory)
+    #     targetFolder: $(Build.ArtifactStagingDirectory)
+        
     - task: PublishBuildArtifacts@1
       displayName: 'Publish'
       inputs:

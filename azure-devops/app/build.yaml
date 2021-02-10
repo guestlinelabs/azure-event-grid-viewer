@@ -4,11 +4,11 @@ trigger:
     - main
   paths:
     exclude:
-    - azure-devops/infra
-    - infrastructure
+    - ../infra
+    - ../../infrastructure
     include:
-    - azure-devops/app/*
-    - viewer/*
+    - ../app/*
+    - ../../viewer/*
 
 variables:
   BuildConfiguration: 'Release'

@@ -1,87 +1,87 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "EventGridDomain": {
-        "defaultValue": "pms",
-        "type": "string"
-      },
-      "ServiceName": {
-        "defaultValue": "eventgrid-viewer",
-        "type": "string"
-      },
-      "Environment": {
-        "defaultValue": "ci",
-        "type": "string"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "EventGridDomain": {
+      "defaultValue": "pms",
+      "type": "string"
+    },
+    "ServiceName": {
+      "defaultValue": "eventgrid-viewer",
+      "type": "string"
+    },
+    "Environment": {
+      "defaultValue": "ci",
+      "type": "string"
+    },
+    "sku": {
+      "type": "string",
+      "allowedValues": [
+        "F1",
+        "D1",
+        "B1",
+        "B2",
+        "B3",
+        "S1"
+      ],
+      "defaultValue": "F1",
+      "metadata": {
+        "description": "The pricing tier for the hosting plan."
+      }
+    },
+    "identity": {
+      "type": "string",
+      "defaultValue": "None",
+      "allowedValues": [
+        "None",
+        "SystemAssigned"
+      ]
+    }
+  },
+  "variables": {
+    "AppServiceFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-as')]",
+    "HostingPlanFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-sp')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('HostingPlanFullName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourcegroup().location]",
+      "kind": "app,linux",
+      "properties": {
+        "reserved": true,
+        "name": "[variables('HostingPlanFullName')]"
       },
       "sku": {
-        "type": "string",
-        "allowedValues": [
-          "F1",
-          "D1",
-          "B1",
-          "B2",
-          "B3",
-          "S1"
-        ],
-        "defaultValue": "F1",
-        "metadata": {
-          "description": "The pricing tier for the hosting plan."
-        }
-      },
+        "name": "[parameters('sku')]",
+        "capacity": 0
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('AppServiceFullName')]",
+      "type": "Microsoft.Web/sites",
       "identity": {
-        "type": "string",
-        "defaultValue": "None",
-        "allowedValues": [
-          "None",
-          "SystemAssigned"
-        ]
-      }
-    },
-    "variables": {
-        "AppServiceFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-as')]",
-        "HostingPlanFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-sp')]"
-    },
-    "resources": [
-      {
-        "apiVersion": "2015-08-01",
-        "name": "[variables('HostingPlanFullName')]",
-        "type": "Microsoft.Web/serverfarms",
-        "location": "[resourcegroup().location]",
-        "kind": "app,linux",
-        "properties": {
-            "reserved": true,
-            "name": "[variables('HostingPlanFullName')]"
-        },
-        "sku": {
-          "name": "[parameters('sku')]",
-          "capacity": 0
-        }
+        "type": "[parameters('identity')]"
       },
-      {
-        "apiVersion": "2015-08-01",
-        "name": "[variables('AppServiceFullName')]",
-        "type": "Microsoft.Web/sites",
-        "identity": {
-          "type": "[parameters('identity')]"
+      "location": "[resourcegroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('HostingPlanFullName'))]"
+      ],
+      "properties": {
+        "serverFarmId": "[variables('HostingPlanFullName')]",
+        "siteConfig": {
+          "webSocketsEnabled": true
         },
-        "location": "[resourcegroup().location]",
-        "dependsOn": [
-          "[resourceId('Microsoft.Web/serverfarms', variables('HostingPlanFullName'))]"
-        ],
-        "properties": {
-          "serverFarmId": "[variables('HostingPlanFullName')]",
-          "siteConfig": {
-            "webSocketsEnabled": true         
-          },
-          "httpsOnly":true
-        }
+        "httpsOnly": true
       }
-    ],
-    "outputs": {
-        "appServiceEndpoint": {
-            "type": "string",
-            "value": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0])]"
-        }
+    }
+  ],
+  "outputs": {
+    "appServiceEndpoint": {
+      "type": "string",
+      "value": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0])]"
     }
   }
+}

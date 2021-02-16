@@ -3,9 +3,8 @@ trigger:
     include:
     - main
   paths:
-    exclude:
-    - ../app
-    - ../../viewer
+    include:
+    - infrastructure/*
 
 jobs:
 - job: 'Default'

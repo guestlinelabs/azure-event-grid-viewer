@@ -3,9 +3,8 @@ trigger:
     include:
     - main
   paths:
-    exclude:
-    - ../infra
-    - ../../infrastructure
+    include:
+    - viewer/*
 
 variables:
   BuildConfiguration: 'Release'

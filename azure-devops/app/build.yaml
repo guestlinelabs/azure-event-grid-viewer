@@ -4,8 +4,8 @@ trigger:
     - main
   paths:
     exclude:
-    - ../infra/*
-    - ../../infrastructure/*
+    - ../infra
+    - ../../infrastructure
 
 variables:
   BuildConfiguration: 'Release'

@@ -4,8 +4,8 @@ trigger:
     - main
   paths:
     exclude:
-    - ../app/*
-    - ../../viewer/*
+    - ../app
+    - ../../viewer
 
 jobs:
 - job: 'Default'

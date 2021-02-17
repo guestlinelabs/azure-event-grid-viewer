@@ -5,9 +5,9 @@ $uri = "https://${appName}.azurewebsites.net"
 $issuer = "https://sts.windows.net/${tenantId}/"
 $replyUri = "${uri}/.auth/login/aad/callback"
 
-$appId = az ad app create --display-name $appName  --identifier-uris $uri --reply-urls $replyUri -o json --query appId
+$appId = az ad app create --display-name $appName  --identifier-uris $uri --reply-urls $replyUri --query appId
 
-$clientSecret = az ad app credential reset --id $appId -o json --query password
+$clientSecret = az ad app credential reset --id $appId --query password
 
 az webapp auth update -g $resourceGroup -n $appName --enabled true --action LoginWithAzureActiveDirectory --aad-client-id $appId --aad-token-issuer-url $issuer --token-store true  --aad-allowed-token-audiences $uri --aad-client-secret $clientSecret
 

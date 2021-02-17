@@ -29,13 +29,17 @@
         "description": "The pricing tier for the hosting plan."
       }
     },
-    "identity": {
+    "Identity": {
       "type": "string",
       "defaultValue": "None",
       "allowedValues": [
         "None",
         "SystemAssigned"
       ]
+    },
+    "ResourceOwner": {
+      "type": "string",
+      "defaultValue": "Insights"
     }
   },
   "variables": {
@@ -53,6 +57,11 @@
         "reserved": true,
         "name": "[variables('HostingPlanFullName')]"
       },
+      "tags": {
+        "Owner": "[parameters('ResourceOwner')]",
+        "Environment": "[parameters('Environment')]",
+        "ARM": "True"
+      },
       "sku": {
         "name": "[parameters('sku')]",
         "capacity": 0
@@ -63,7 +72,7 @@
       "name": "[variables('AppServiceFullName')]",
       "type": "Microsoft.Web/sites",
       "identity": {
-        "type": "[parameters('identity')]"
+        "type": "[parameters('Identity')]"
       },
       "location": "[resourcegroup().location]",
       "dependsOn": [
@@ -73,6 +82,11 @@
         "serverFarmId": "[variables('HostingPlanFullName')]",
         "siteConfig": {
           "webSocketsEnabled": true
+        },
+        "tags": {
+          "Owner": "[parameters('ResourceOwner')]",
+          "Environment": "[parameters('Environment')]",
+          "ARM": "True"
         },
         "httpsOnly": true
       }

@@ -30,14 +30,27 @@ jobs:
         command: publish
         publishWebProjects: False
         projects: $(ProjectPath)
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory/app)'
         zipAfterPublish: True
         
     - task: PublishBuildArtifacts@1
       displayName: 'Publish'
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/app'
         artifactName: 'viewer'
         publishLocation: 'Container'
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+    - task: CopyFiles@2
+      displayName: Copy Files
+      inputs:
+        Contents: 'viewer/eventgridsubscription/*.json'
+        TargetFolder: $(build.ArtifactStagingDirectory)/sub
+  
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        pathtoPublish: '$(build.ArtifactStagingDirectory)/sub'
+        artifactName: 'subscription'
+        publishLocation: 'Container'
 ...

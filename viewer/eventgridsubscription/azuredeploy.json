@@ -31,7 +31,7 @@
         "destination": {
           "endpointType": "WebHook",
           "properties": {
-            "endpointUrl": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0])]"
+            "endpointUrl": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0], '/api/updates')]"
           }
         },
         "filter": {

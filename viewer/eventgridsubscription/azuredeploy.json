@@ -16,17 +16,17 @@
     }
   },
   "variables": {
+    "ShortPrefix": "[concat('gl-', parameters('Environment'))]",
     "SubscriptionName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-egs')]",
+    "EventGridDomainName": "[concat(variables('ShortPrefix') ,'-', parameters('EventGridDomain'),'-egd')]",
+    "SubscriptionResourceName": "[concat(variables('EventGridDomainName'),'/Microsoft.EventGrid/', variables('SubscriptionName'))]",
     "AppServiceFullName": "[concat(parameters('EventGridDomain'),'-',parameters('ServiceName'),'-',parameters('Environment'),'-as')]"
   },
   "resources": [
     {
-      "name": "[variables('SubscriptionName')]",
+      "name": "[variables('SubscriptionResourceName')]",
       "type": "Microsoft.EventGrid/eventSubscriptions",
       "apiVersion": "2020-06-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites',  variables('AppServiceFullName'))]"
-      ],
       "properties": {
         "destination": {
           "endpointType": "WebHook",
@@ -37,6 +37,7 @@
         "filter": {
           "isSubjectCaseSensitive": false
         },
+        "eventDeliverySchema": "EventGridSchema",
         "retryPolicy": {
           "maxDeliveryAttempts": 30,
           "eventTimeToLiveInMinutes": 1440

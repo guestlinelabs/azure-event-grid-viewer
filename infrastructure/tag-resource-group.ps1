@@ -1,7 +1,5 @@
-param ($resourceGroup, $tags)
-
-Write-Host $tags
+param ($resourceGroup, $owner, $environment)
 
 $rgId = az group show --name $resourceGroup --query id
 
-az tag create --resource-id $rgId --tags $tags
+az tag create --resource-id $rgId --tags "Owner=${owner}" "Environment=${environment}" "ARM=true"

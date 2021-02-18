@@ -1,5 +1,5 @@
-param ($resourceGroupName, $tags)
+param ($resourceGroup, $tags)
 
-$rgId = az group show --name pms-eventgrid-viewer-ci-rg --query id
+$rgId = az group show --name $resourceGroup --query id
 
 az tag create --resource-id $rgId --tags $tags

@@ -13,6 +13,12 @@
     "Environment": {
       "defaultValue": "ci",
       "type": "string"
+    },
+    "TenantId": {
+      "type": "string"
+    },
+    "ViewerResourceGroup": {
+      "type": "string"
     }
   },
   "variables": {
@@ -24,14 +30,16 @@
   },
   "resources": [
     {
-      "name": "[variables('SubscriptionName')]",
-      "type": "Microsoft.EventGrid/eventSubscriptions",
+      "name": "[variables('SubscriptionResourceName')]",
+      "type": "Microsoft.EventGrid/domains/providers/eventSubscriptions", // Note that 'type' will be flagged as having an incorrect value, but that's bullshit. It's correct for domain scoped subs but not documented. Thanks MS.
       "apiVersion": "2020-06-01",
       "properties": {
         "destination": {
           "endpointType": "WebHook",
           "properties": {
-            "endpointUrl": "[concat('https://',reference(resourceId('Microsoft.Web/sites', variables('AppServiceFullName'))).hostNames[0], '/api/updates')]"
+            "azureActiveDirectoryApplicationIdOrUri": "[concat('https://', reference(resourceId(parameters('ViewerResourceGroup'), 'Microsoft.Web/sites', variables('AppServiceFullName')), '2018-11-01').hostNames[0])]",
+            "azureActiveDirectoryTenantId": "[parameters('TenantId')]",
+            "endpointUrl": "[concat('https://', reference(resourceId(parameters('ViewerResourceGroup'), 'Microsoft.Web/sites', variables('AppServiceFullName')), '2018-11-01').hostNames[0], '/api/updates')]"
           }
         },
         "filter": {
